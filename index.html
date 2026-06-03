@@ -1794,5 +1794,1248 @@
     });
   });
 </script>
+<style>
+  /* ── NĀDA TAB SYSTEM ── */
+  .nada-section {
+    margin-top: 80px;
+    border-top: 2px solid var(--gold-dim);
+  }
+
+  .nada-tab-header {
+    background: var(--panel2);
+    border-bottom: 1px solid var(--border2);
+    padding: 36px 32px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nada-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  .nada-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .nada-title-row h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(20px, 3vw, 30px);
+    color: var(--cream);
+    line-height: 1.2;
+  }
+
+  .nada-title-row .nada-deva {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 15px;
+    color: var(--gold);
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text3);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 10px 18px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .25s;
+  }
+  .tab-btn:hover { color: var(--gold2); }
+  .tab-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    background: rgba(201,168,76,.05);
+  }
+
+  /* ── TAB PANELS ── */
+  .nada-panels {
+    padding: 0 32px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .tab-panel { display: none; padding-top: 40px; }
+  .tab-panel.active { display: block; }
+
+  /* ── RAGA GRID ── */
+  .raga-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .raga-card {
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--gold-dim);
+    padding: 16px 18px;
+  }
+
+  .raga-card.highlighted { border-left-color: var(--gold); }
+
+  .raga-num {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 12px;
+    color: var(--gold-dim);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .raga-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .raga-deva {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 13px;
+    color: var(--gold2);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .raga-svara {
+    font-size: 12px;
+    color: var(--text2);
+    font-style: italic;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .raga-xref {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--gold-dim);
+    display: block;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+    margin-top: 6px;
+  }
+
+  .raga-xref a {
+    color: var(--gold-dim);
+    text-decoration: none;
+  }
+  .raga-xref a:hover { color: var(--gold); }
+
+  /* ── ALANKARAS TABLE ── */
+  .alankara-row {
+    display: grid;
+    grid-template-columns: 40px 160px 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    align-items: start;
+    font-size: 14px;
+  }
+
+  .alankara-row.header {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gold2);
+    border-bottom: 1px solid var(--border2);
+    padding-bottom: 8px;
+  }
+
+  .alankara-row .col-num { color: var(--gold); font-family: 'Noto Serif Devanagari', serif; }
+  .alankara-row .col-name { color: var(--cream2); font-style: italic; }
+  .alankara-row .col-pattern { color: var(--text2); font-size: 13px; letter-spacing: 1px; }
+  .alankara-row .col-xref { color: var(--gold-dim); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; line-height: 1.8; }
+
+  @media (max-width: 600px) {
+    .alankara-row { grid-template-columns: 30px 1fr; }
+    .alankara-row .col-pattern, .alankara-row .col-xref { grid-column: 2; }
+  }
+
+  /* ── OCTAVE MANDALA ── */
+  .octave-block {
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  .octave-block .octave-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .octave-block .octave-deva {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 14px;
+    color: var(--gold2);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .svara-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 8px 0;
+  }
+
+  .svara-pip {
+    background: var(--panel2);
+    border: 1px solid var(--border2);
+    color: var(--cream2);
+    font-size: 12px;
+    font-style: italic;
+    padding: 4px 10px;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .svara-pip.sa { border-color: var(--gold); color: var(--gold2); }
+
+  /* ── NĀDA PHILOSOPHY CALLOUT ── */
+  .nada-callout {
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--gold);
+    background: var(--panel);
+    padding: 22px 26px;
+    margin: 28px 0;
+  }
+
+  .nada-callout h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .nada-callout p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  /* ── CORRESPONDENCE TABLE ── */
+  .corresp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 20px 0;
+  }
+
+  .corresp-table th {
+    background: var(--panel2);
+    color: var(--gold2);
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .corresp-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .corresp-table tr:nth-child(even) td { background: rgba(255,255,255,.018); }
+
+  .corresp-table .td-svara {
+    font-style: italic;
+    color: var(--gold2);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .corresp-table .td-deva {
+    font-family: 'Noto Serif Devanagari', serif;
+    color: var(--cream);
+  }
+
+  .corresp-table .td-nama {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--gold-dim);
+  }
+</style>
+
+<!-- ── NĀDA SECTION ── -->
+<div class="nada-section" id="nada-section">
+
+  <div class="nada-tab-header">
+    <div class="main-wrap" style="padding-bottom:0; padding-top:0;">
+      <div class="nada-eyebrow">नाद-मेल-स्वर-विश्लेषणम् · Sonic Analysis · Cross-Referenced to Part IV Nāmas 225–365</div>
+      <div class="nada-title-row">
+        <h2>Nāda · Mēḷakarta · Svara · Alaṅkāra</h2>
+        <span class="nada-deva">ॐ ललिता ध्यान</span>
+      </div>
+      <div class="tab-bar" role="tablist">
+        <button class="tab-btn active" onclick="showTab('nada-philosophy')" role="tab">I · Nāda Philosophy</button>
+        <button class="tab-btn" onclick="showTab('sapta-svara')" role="tab">II · Sapta Svara & 12 Octaves</button>
+        <button class="tab-btn" onclick="showTab('melakarta')" role="tab">III · 72 Mēḷakarta Rāgas</button>
+        <button class="tab-btn" onclick="showTab('alankara')" role="tab">IV · 9 Alaṅkāras</button>
+        <button class="tab-btn" onclick="showTab('xref-matrix')" role="tab">V · Cross-Reference Matrix</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nada-panels">
+
+    <!-- ══════════ TAB I · NĀDA PHILOSOPHY ══════════ -->
+    <div class="tab-panel active" id="tab-nada-philosophy">
+
+      <div class="section-label">Tab I · Nāda-Brahman · Sound as the Goddess's Body</div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(20px,3vw,30px); color:var(--cream); margin-bottom:20px;">
+        Nāda-Brahman · The Sonic Absolute · नादब्रह्म
+      </h2>
+
+      <p class="prose">
+        Nāma 299 (<em>Nādarūpā</em>) — "She who is in the form of primordial sound" — establishes the sonic framework that underlies the entire musical analysis of this section. In the Nāṭyaśāstra (Bharata Muni, c. 200 BCE–200 CE) and Saṅgīta Ratnākara (Śārṅgadeva, 1210–1247 CE), Nāda is not mere physical sound but the universe's primary vibration — the Goddess's own body manifesting as sonic creation. The entire 72-Mēḷakarta system, the 9 Alaṅkāras, and the 12-octave framework of Carnatic music are thus treated here as direct sonic reflections of the Goddess's attributes described in nāmas 225–365.
+      </p>
+
+      <div class="nada-callout">
+        <h4>The Four Levels of Nāda · चतुर्विध नाद</h4>
+        <p>
+          <strong>Parā Nāda</strong> — The transcendent, motionless sound at the Mūlādhāra. Pre-sonic. The Goddess as Nāmarūpavivarjitā (nāma 300) — beyond all name and form, including sonic form. <br><br>
+          <strong>Paśyantī Nāda</strong> — The "seen-sound" at the Maṇipūra — sound as pure luminous potential, not yet differentiated into specific frequencies. Corresponds to the Goddess as Cinmayī (nāma 251) — pure consciousness. <br><br>
+          <strong>Madhyamā Nāda</strong> — The "middle sound" at the Anāhata (heart) — the mental-intentional formation of a specific note before it is vocalized. Corresponds to the Goddess as Hṛdyā (nāma 303) — the heart-dweller. <br><br>
+          <strong>Vaikharī Nāda</strong> — Articulated, audible sound at the Viśuddha. The seven svaras, the 72 mēḷas, the alaṅkāras — all Vaikharī. Corresponds to the Goddess as Vāg-vādinī (nāma 350) — the activity of speech and song.
+        </p>
+      </div>
+
+      <div class="nada-callout" style="border-left-color: var(--crimson);">
+        <h4>Nāda in the Saṅgīta Ratnākara · Śārṅgadeva's Framework</h4>
+        <p>
+          Śārṅgadeva opens the Saṅgīta Ratnākara with: <em>"Nāda is of two kinds — āhata (struck, produced by effort) and anāhata (unstruck, self-arising). The science of music deals with āhata-nāda; but its ultimate purpose is to lead the practitioner back to anāhata-nāda — the sound the Goddess herself is."</em> This directly parallels the Sahasranāma's movement: the 1000 names (Vaikharī, āhata) point toward the Goddess who is Nādarūpā (the anāhata beneath all names). The entire musical tradition of India is thus a sādhana — the āhata pointing toward the anāhata, the named pointing toward the Nāmarūpavivarjitā.
+        </p>
+      </div>
+
+      <table class="corresp-table">
+        <thead>
+          <tr>
+            <th>Nāda Concept</th>
+            <th>Sanskrit / Devanāgarī</th>
+            <th>Musical Correlate</th>
+            <th>Cross-Ref · Part IV Nāma</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Anāhata (unstruck sound)</td>
+            <td class="td-deva">अनाहत नाद</td>
+            <td>The silence before Sa — the drone's root</td>
+            <td class="td-nama">Nāma 300 · Nāmarūpavivarjitā</td>
+          </tr>
+          <tr>
+            <td>Nāda-Brahman</td>
+            <td class="td-deva">नादब्रह्म</td>
+            <td>The śruti — the micro-interval fabric</td>
+            <td class="td-nama">Nāma 299 · Nādarūpā</td>
+          </tr>
+          <tr>
+            <td>Svara (self-shining note)</td>
+            <td class="td-deva">स्वर</td>
+            <td>Sa Ri Ga Ma Pa Dha Ni</td>
+            <td class="td-nama">Nāma 251 · Cinmayī</td>
+          </tr>
+          <tr>
+            <td>Grāma (tonal village/cluster)</td>
+            <td class="td-deva">ग्राम</td>
+            <td>Ṣaḍja-grāma, Madhyama-grāma</td>
+            <td class="td-nama">Nāma 285 · Ābrahma-kīṭa-jananī</td>
+          </tr>
+          <tr>
+            <td>Mūrchanā (scale-form)</td>
+            <td class="td-deva">मूर्च्छना</td>
+            <td>Modal rotation of a mēḷa</td>
+            <td class="td-nama">Nāma 256 · Viśvarūpā</td>
+          </tr>
+          <tr>
+            <td>Tāna (melodic elaboration)</td>
+            <td class="td-deva">तान</td>
+            <td>Fast arpeggio passages in ālāpana</td>
+            <td class="td-nama">Nāma 309 · Rañjanī — "She who colors the mind"</td>
+          </tr>
+          <tr>
+            <td>Gamaka (ornament)</td>
+            <td class="td-deva">गमक</td>
+            <td>Oscillation between adjacent śrutis</td>
+            <td class="td-nama">Nāma 242 · Cāruhāsā — "Beautiful, tremulous smile"</td>
+          </tr>
+          <tr>
+            <td>Laya (dissolution into rhythm)</td>
+            <td class="td-deva">लय</td>
+            <td>Merging of melody into tāla</td>
+            <td class="td-nama">Nāma 232 · Mahātāṇḍava-sākṣiṇī</td>
+          </tr>
+          <tr>
+            <td>Śruti (micro-tone)</td>
+            <td class="td-deva">श्रुति</td>
+            <td>22 śrutis in one octave</td>
+            <td class="td-nama">Nāma 289 · Śruti-sīmanta-sindūrī…</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- ══════════ TAB II · SAPTA SVARA & 12 OCTAVES ══════════ -->
+    <div class="tab-panel" id="tab-sapta-svara">
+
+      <div class="section-label">Tab II · Sapta Svara · सप्त स्वर · Seven Notes & Twelve Octave Positions</div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(20px,3vw,30px); color:var(--cream); margin-bottom:20px;">
+        The Seven Svaras as the Goddess's Seven Aspects
+      </h2>
+
+      <p class="prose">The Nāṭyaśāstra (Adhyāya 28) identifies each of the seven svaras with a specific deity, cosmic principle, and bird or animal voice. In the Śrī Vidyā framework, the seven svaras map directly to the seven major cakras, the seven planes of consciousness, and — as analyzed below — to specific nāmas in the 225–365 range of the Lalitā Sahasranāma. The 12-octave system (Ṣaḍja in 12 chromatic positions) yields the full grid of 72 Mēḷakarta parent-scales.</p>
+
+      <table class="corresp-table">
+        <thead>
+          <tr>
+            <th>Svara</th>
+            <th>Devanāgarī / Full Name</th>
+            <th>Cakra · Deity (Nāṭyaśāstra)</th>
+            <th>Goddess Attribute · Part IV Nāma</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-svara">Sa</td>
+            <td class="td-deva">ष · षड्ज — "born of six"</td>
+            <td>Mūlādhāra · Brahmā · Peacock's cry</td>
+            <td>Nāma 265 · <em>Brahmarūpā</em> — She who IS Brahmā; the root tonic, unmoved origin of all melody</td>
+          </tr>
+          <tr>
+            <td class="td-svara">Ri</td>
+            <td class="td-deva">रि · ऋषभ — "the bull"</td>
+            <td>Svādhiṣṭhāna · Brahmā/Agni · Chataka bird</td>
+            <td>Nāma 248 · <em>Padmarāga-samaprabha</em> — Ruby-red inner radiance; Ri's slightly raised brightness</td>
+          </tr>
+          <tr>
+            <td class="td-svara">Ga</td>
+            <td class="td-deva">ग · गान्धार — "of Gandhāra"</td>
+            <td>Maṇipūra · Sarasvatī · Goat</td>
+            <td>Nāma 252 · <em>Paramānandā</em> — Supreme bliss; Ga carries the emotional heart of a rāga</td>
+          </tr>
+          <tr>
+            <td class="td-svara">Ma</td>
+            <td class="td-deva">म · मध्यम — "the middle one"</td>
+            <td>Anāhata · Śiva · Krauñca bird</td>
+            <td>Nāma 303 · <em>Hṛdyā</em> — She who abides in the heart; Ma is the heart-note, pivotal in every scale</td>
+          </tr>
+          <tr>
+            <td class="td-svara">Pa</td>
+            <td class="td-deva">प · पञ्चम — "the fifth"</td>
+            <td>Viśuddha · Lakṣmī · Cuckoo (Kokila)</td>
+            <td>Nāma 313 · <em>Ramā</em> — She who IS Lakṣmī; Pa never varies (acala), like the Goddess's eternal nature</td>
+          </tr>
+          <tr>
+            <td class="td-svara">Dha</td>
+            <td class="td-deva">ध · धैवत — "the stable"</td>
+            <td>Ājñā · Gaṇeśa · Horse</td>
+            <td>Nāma 344 · <em>Kṣayavṛddhivinirmuktā</em> — Free from growth and decay; Dha as the stable sixth</td>
+          </tr>
+          <tr>
+            <td class="td-svara">Ni</td>
+            <td class="td-deva">नि · निषाद — "the seated one"</td>
+            <td>Sahasrāra · Viṣṇu · Elephant</td>
+            <td>Nāma 262 · <em>Turyā</em> — The fourth/witness state; Ni leads the ear back to Sa as Turya opens to Turyātīta</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ornament">✦ · ✦ · ✦</div>
+
+      <div class="section-label" style="margin-top:36px;">The 12 Chromatic Positions · द्वादश स्वरस्थान</div>
+      <p class="prose" style="margin-bottom:20px;">
+        Within one octave, the 7 svaras occupy 12 distinct chromatic positions (the Ri, Ga, Dha, Ni each have two variants — śuddha and tīvra/komal — while Sa, Pa, and the tīvra Ma remain fixed). The 12-octave framework maps these 12 positions across the three octave-registers (mandra, madhya, tāra), yielding 36 pitch positions. The Goddess's three registers correspond to the three bodies (<em>sthūla, sūkṣma, kāraṇa</em>).
+      </p>
+
+      <div class="octave-block">
+        <span class="octave-label">MANDRA STHĀYI · मन्द्र स्थायी · The Lower Octave · Gross Body / Earth Plane</span>
+        <span class="octave-deva">स्थूलशरीर — भूलोक — Creation / Sṛṣṭi</span>
+        <span style="font-size:13px; color:var(--text2); margin-bottom:6px; display:block;">Cross-ref: Nāmas 264–267 · Sṛṣṭikartrī · Brahmarūpā · Goptrī · Govinda-rūpiṇī</span>
+        <div class="svara-row">
+          <span class="svara-pip sa">Ṣa</span>
+          <span class="svara-pip">Ri₁</span>
+          <span class="svara-pip">Ri₂</span>
+          <span class="svara-pip">Ga₁</span>
+          <span class="svara-pip">Ga₂</span>
+          <span class="svara-pip">Ma₁</span>
+          <span class="svara-pip">Ma₂</span>
+          <span class="svara-pip sa">Pa</span>
+          <span class="svara-pip">Dha₁</span>
+          <span class="svara-pip">Dha₂</span>
+          <span class="svara-pip">Ni₁</span>
+          <span class="svara-pip">Ni₂</span>
+        </div>
+      </div>
+
+      <div class="octave-block">
+        <span class="octave-label">MADHYA STHĀYI · मध्य स्थायी · The Middle Octave · Subtle Body / Heart</span>
+        <span class="octave-deva">सूक्ष्मशरीर — भुवर्लोक — Preservation / Sthiti</span>
+        <span style="font-size:13px; color:var(--text2); margin-bottom:6px; display:block;">Cross-ref: Nāmas 240 · 275 · 303 — Moon-center, Sun-center, Hṛdyā</span>
+        <div class="svara-row">
+          <span class="svara-pip sa">Ṣa</span>
+          <span class="svara-pip">Ri₁</span>
+          <span class="svara-pip">Ri₂</span>
+          <span class="svara-pip">Ga₁</span>
+          <span class="svara-pip">Ga₂</span>
+          <span class="svara-pip">Ma₁</span>
+          <span class="svara-pip">Ma₂</span>
+          <span class="svara-pip sa">Pa</span>
+          <span class="svara-pip">Dha₁</span>
+          <span class="svara-pip">Dha₂</span>
+          <span class="svara-pip">Ni₁</span>
+          <span class="svara-pip">Ni₂</span>
+        </div>
+      </div>
+
+      <div class="octave-block">
+        <span class="octave-label">TĀRA STHĀYI · तार स्थायी · The Upper Octave · Causal Body / Sahasrāra</span>
+        <span class="octave-deva">कारणशरीर — स्वर्लोक — Liberation / Anugraha</span>
+        <span style="font-size:13px; color:var(--text2); margin-bottom:6px; display:block;">Cross-ref: Nāmas 262–263 · Turyā · Sarvāvasthāvivarjitā — the state beyond all states</span>
+        <div class="svara-row">
+          <span class="svara-pip sa">Ṣa</span>
+          <span class="svara-pip">Ri₁</span>
+          <span class="svara-pip">Ri₂</span>
+          <span class="svara-pip">Ga₁</span>
+          <span class="svara-pip">Ga₂</span>
+          <span class="svara-pip">Ma₁</span>
+          <span class="svara-pip">Ma₂</span>
+          <span class="svara-pip sa">Pa</span>
+          <span class="svara-pip">Dha₁</span>
+          <span class="svara-pip">Dha₂</span>
+          <span class="svara-pip">Ni₁</span>
+          <span class="svara-pip">Ni₂</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════ TAB III · 72 MĒḶAKARTA ══════════ -->
+    <div class="tab-panel" id="tab-melakarta">
+
+      <div class="section-label">Tab III · 72 Mēḷakarta Rāgas · सप्तति मेळकर्त राग</div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(20px,3vw,30px); color:var(--cream); margin-bottom:12px;">
+        The 72 Parent Scales · Cross-Referenced to Part IV Nāmas
+      </h2>
+      <p class="prose">The 72 Mēḷakarta system (codified by Veṅkaṭamakhin, c. 1620 CE) organizes all possible heptatonic scales of Carnatic music into 12 groups of 6. The number 72 resonates with the 72 names of the Goddess in specific Tantric listings, and with the 72,000 nāḍīs of the subtle body. Below, the 72 mēḷas are listed with their svara-sets and cross-references to Part IV nāmas whose theological attributes resonate with each rāga's character (rasa, bhāva, and time/season of performance).</p>
+
+      <div class="nada-callout">
+        <h4>How to Read These Cross-References</h4>
+        <p>Each cross-reference pairs a rāga's primary <em>rasa</em> (aesthetic mood) or dominant svara-character with the most resonant nāma from Part IV. A rāga evoking śānta (peace) is paired with nāmas of the Goddess's witness-consciousness; a rāga evoking śṛṅgāra (love) with her beauty-epithets; a rāga evoking raudra (ferocity) with her pañcakṛtya dissolution nāmas. The 12 cakra-groups of mēḷas further correspond to the 12 positions of the chromatic scale.</p>
+      </div>
+
+      <div class="raga-grid">
+
+        <!-- CAKRA 1 · Indu -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 1 · Cakra I (Indu)</span>
+          <span class="raga-name">Kanakaṅgi</span>
+          <span class="raga-deva">कनकाङ्गी</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₁ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Rasa: Śānta (peace) · Nāma 263 · <em>Sarvāvasthāvivarjitā</em> — She who transcends all states; the pure neutral tonic of all scales</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 2 · Cakra I</span>
+          <span class="raga-name">Ratnāṅgi</span>
+          <span class="raga-deva">रत्नाङ्गी</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₁ Pa Dha₁ Ni₂</span>
+          <span class="raga-xref">Nāma 248 · <em>Padmarāga-samaprabha</em> — Ruby-radiance; the raised Ni₂ is the ruby's inner flash</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 3 · Cakra I</span>
+          <span class="raga-name">Gānamurti</span>
+          <span class="raga-deva">गानमूर्ति</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₁ Pa Dha₂ Ni₂</span>
+          <span class="raga-xref">Nāma 227 · <em>Mahāmantrā</em> — The greatest mantra; Gānamurti = "form of music" — the Goddess as sonic form</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 4 · Cakra I</span>
+          <span class="raga-name">Vanaspati</span>
+          <span class="raga-deva">वनस्पति</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₁ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Nāma 325 · <em>Jagatīkandā</em> — Root-bulb of the world; Vanaspati = lord of the forest, the invisible root</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 5 · Cakra I</span>
+          <span class="raga-name">Mānavati</span>
+          <span class="raga-deva">मानवती</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₁ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 238 · <em>Manuvidyā</em> — The primordial knowledge of Manu; Mānavati = "of humankind"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 6 · Cakra I</span>
+          <span class="raga-name">Tānarūpi</span>
+          <span class="raga-deva">तानरूपी</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₁ Pa Dha₃ Ni₄</span>
+          <span class="raga-xref">Nāma 299 · <em>Nādarūpā</em> — She who IS sound; Tānarūpi = "of the form of melodic elaboration (tāna)"</span>
+        </div>
+
+        <!-- CAKRA 2 · Netra -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 7 · Cakra II (Netra)</span>
+          <span class="raga-name">Senāvati</span>
+          <span class="raga-deva">सेनावती</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₁ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Nāma 237 · <em>Mahā-catuṣṣaṣṭi-koṭi-yoginī-gaṇa-sevitā</em> — Served by armies of Yoginīs; Senāvati = "commander of armies"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 8 · Cakra II</span>
+          <span class="raga-name">Hanumatodi</span>
+          <span class="raga-deva">हनुमतोडि</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₁ Pa Dha₁ Ni₂</span>
+          <span class="raga-xref">Rasa: Karuṇā · Nāma 326 · <em>Karuṇārasasāgarā</em> — Ocean of compassion; Todi is the rāga of pathos and longing</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 9 · Cakra II</span>
+          <span class="raga-name">Dhenuka</span>
+          <span class="raga-deva">धेनुका</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₁ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Nāma 349 · <em>Vandārujana-vatsalā</em> — Loves devotees as a cow her calf; Dhenuka = "the cow"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 10 · Cakra II</span>
+          <span class="raga-name">Nāṭakapriya</span>
+          <span class="raga-deva">नाटकप्रिया</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₁ Pa Dha₂ Ni₂</span>
+          <span class="raga-xref">Nāma 232 · <em>Mahātāṇḍava-sākṣiṇī</em> — Witness of Śiva's cosmic dance; Nāṭaka = theatrical performance</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 11 · Cakra II</span>
+          <span class="raga-name">Kokilapriya</span>
+          <span class="raga-deva">कोकिलप्रिया</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₁ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Nāma 242 · <em>Cāruhāsā</em> — Beautiful smile; Kokila (cuckoo) sings with the Goddess's own smile-sweetness</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 12 · Cakra II</span>
+          <span class="raga-name">Rūpavati</span>
+          <span class="raga-deva">रूपवती</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₁ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 241 · <em>Cārurūpā</em> — She whose beauty never wanes; Rūpavati = "the beautiful one"</span>
+        </div>
+
+        <!-- CAKRA 3 · Agni -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 13 · Cakra III (Agni)</span>
+          <span class="raga-name">Gāyakapriya</span>
+          <span class="raga-deva">गायकप्रिया</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₁ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Nāma 350 · <em>Vāgvādinī</em> — The activity of speech and song; Gāyaka = singer</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 14 · Cakra III</span>
+          <span class="raga-name">Vakulābharaṇam</span>
+          <span class="raga-deva">वकुलाभरणम्</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₁ Pa Dha₁ Ni₂</span>
+          <span class="raga-xref">Nāma 323 · <em>Kadambakusumapriyā</em> — Fond of Kadamba flowers; Vakula flowers share the Kadamba's monsoon-bloom quality</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 15 · Cakra III</span>
+          <span class="raga-name">Māyāmāḷavagauḷa</span>
+          <span class="raga-deva">मायामाळवगौळ</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₁ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Rasa: Bhakti/Śānta · Nāma 270 · <em>Tirodhānakarī</em> — The great veiler; Māyāmāḷavagauḷa's Ri₁ Ga₃ tension encodes Māyā's veil; dawn rāga of revelation</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 16 · Cakra III</span>
+          <span class="raga-name">Cakravākam</span>
+          <span class="raga-deva">चक्रवाकम्</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₁ Pa Dha₂ Ni₂</span>
+          <span class="raga-xref">Nāma 245 · <em>Cakrarājaniketanā</em> — She who abides in the Śrī Cakra; Cakravāka = the bird who calls at dawn for its mate</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 17 · Cakra III</span>
+          <span class="raga-name">Sūryakāntam</span>
+          <span class="raga-deva">सूर्यकान्तम्</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₁ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Nāma 275 · <em>Bhānumaṇḍalamadhyasthā</em> — She at the center of the sun's disc; Sūryakāntam = "beloved of the sun"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 18 · Cakra III</span>
+          <span class="raga-name">Hāṭakāmbari</span>
+          <span class="raga-deva">हाटकाम्बरी</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₁ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 229 · <em>Mahāsanā</em> — Seated on the great throne; Hāṭaka = gold; Ambari = sky; the gold-sky of the Goddess's sovereign seat</span>
+        </div>
+
+        <!-- CAKRA 4 · Veda -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 19 · Cakra IV (Veda)</span>
+          <span class="raga-name">Jhañkāradhvani</span>
+          <span class="raga-deva">झंकारध्वनि</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₁ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Nāma 299 · <em>Nādarūpā</em> — Jhañkāra = tinkling/ringing sound; the primordial Nāda as ring of a bell</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 20 · Cakra IV</span>
+          <span class="raga-name">Naṭabhairavi</span>
+          <span class="raga-deva">नटभैरवी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₁ Pa Dha₁ Ni₂</span>
+          <span class="raga-xref">Rasa: Śṛṅgāra + Raudra · Nāma 276 · <em>Bhairavī</em> — She who is Bhairavī; Naṭabhairavi is the most beloved evening rāga of the Bhairavī tradition</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 21 · Cakra IV</span>
+          <span class="raga-name">Kīravāṇi</span>
+          <span class="raga-deva">कीरवाणी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₁ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Nāma 239 · <em>Candravidyā</em> — Lunar wisdom; Kīravāṇi's melancholic descending phrases evoke the inward lunar path</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 22 · Cakra IV</span>
+          <span class="raga-name">Kharaharapriya</span>
+          <span class="raga-deva">खरहरप्रिया</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₁ Pa Dha₂ Ni₂</span>
+          <span class="raga-xref">Rasa: Śānta · Nāma 251 · <em>Cinmayī</em> — Pure consciousness; Kharaharapriya is the Carnatic equivalent of Kāfī — the rāga of the natural, unconstructed mind</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 23 · Cakra IV</span>
+          <span class="raga-name">Gaurimanohara</span>
+          <span class="raga-deva">गौरीमनोहर</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₁ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Nāma 246 · <em>Pārvatī</em> — Daughter of the mountain; Gaurī = Pārvatī's most direct name; Manohara = heart-captivating</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 24 · Cakra IV</span>
+          <span class="raga-name">Varuṇapriya</span>
+          <span class="raga-deva">वरुणप्रिया</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₁ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 330 · <em>Kādambarīpriyā</em> — Fond of celestial nectar-wine; Varuṇa governs cosmic waters and the soma-plant</span>
+        </div>
+
+        <!-- CAKRA 5 · Bāṇa -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 25 · Cakra V (Bāṇa)</span>
+          <span class="raga-name">Mārarañjani</span>
+          <span class="raga-deva">माररञ्जनी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Nāma 309 · <em>Rañjanī</em> — She who colors the mind with delight; Mārarañjani = "that which delights Māra (Kāma)"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 26 · Cakra V</span>
+          <span class="raga-name">Cārukesi</span>
+          <span class="raga-deva">चारुकेशी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₁ Ni₂</span>
+          <span class="raga-xref">Nāma 241 · <em>Cārurūpā</em> — Unchanging beauty; Cārukesi = "beautiful-haired"; the Goddess whose beauty does not wax or wane</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 27 · Cakra V</span>
+          <span class="raga-name">Sarasāṅgi</span>
+          <span class="raga-deva">सरसाङ्गी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Nāma 364 · <em>Cideka-rasa-rūpiṇī</em> — Of the nature of undivided consciousness-rasa; Sarasa = full of rasa/juice</span>
+        </div>
+
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 28 · Cakra V</span>
+          <span class="raga-name">Harikāmbhoji</span>
+          <span class="raga-deva">हरिकाम्भोजी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₂ Ni₂</span>
+          <span class="raga-xref">Rasa: Śṛṅgāra · Nāma 233 · <em>Mahākāmeśamahiṣī</em> — Queen of the great lord of love; Harikāmbhoji is the sovereign rāga of the Kambhoji group, the most regal of Śṛṅgāra rāgas</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 29 · Cakra V</span>
+          <span class="raga-name">Dhīraśaṅkarābharaṇam</span>
+          <span class="raga-deva">धीरशंकराभरणम्</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Nāma 272 · <em>Sadāśivā</em> — Always-Auspicious; Śaṅkarābharaṇam = "ornament of Śaṅkara"; the parent scale of all natural/major-mode rāgas</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 30 · Cakra V</span>
+          <span class="raga-name">Nāgānandinī</span>
+          <span class="raga-deva">नागानन्दिनी</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 252 · <em>Paramānandā</em> — Supreme bliss; Nāgānandinī = "daughter of the serpent-bliss" — the Kuṇḍalinī's rising joy</span>
+        </div>
+
+        <!-- CAKRA 6 · Ṛtu -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 31 · Cakra VI (Ṛtu)</span>
+          <span class="raga-name">Yāgapriya</span>
+          <span class="raga-deva">यागप्रिया</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₁ Pa Dha₃ Ni₄</span>
+          <span class="raga-xref">Nāma 230 · <em>Mahāyāgakramārādhyā</em> — Worshipped by the Mahāyāga; Yāgapriya = "fond of sacrifice"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 32 · Cakra VI</span>
+          <span class="raga-name">Rāgavardhini</span>
+          <span class="raga-deva">रागवर्धिनी</span>
+          <span class="raga-svara">Sa Ri₃ Ga₃ Ma₁ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Nāma 321 · <em>Kāmyā</em> — The supremely desirable; Rāgavardhini = "increaser of rāga (passion/longing)"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 33 · Cakra VI</span>
+          <span class="raga-name">Gāngeyabhuṣaṇi</span>
+          <span class="raga-deva">गाङ्गेयभूषणि</span>
+          <span class="raga-svara">Sa Ri₃ Ga₃ Ma₁ Pa Dha₁ Ni₂</span>
+          <span class="raga-xref">Nāma 289 · <em>Śruti-sīmanta-sindūrī…</em> — The Vedas wear dust of her feet as vermillion; Gāṅgeya = "of the Gaṅgā"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 34 · Cakra VI</span>
+          <span class="raga-name">Vāgadhīśvari</span>
+          <span class="raga-deva">वागधीश्वरी</span>
+          <span class="raga-svara">Sa Ri₃ Ga₃ Ma₁ Pa Dha₂ Ni₂</span>
+          <span class="raga-xref">Nāma 271 · <em>Īśvarī</em> — Supreme ruler; Vāgadhīśvari = "sovereign of speech and intelligence"</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 35 · Cakra VI</span>
+          <span class="raga-name">Śūlini</span>
+          <span class="raga-deva">शूलिनी</span>
+          <span class="raga-svara">Sa Ri₃ Ga₃ Ma₁ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Nāma 268 · <em>Saṃhāriṇī</em> — The destroyer; Śūlini = "bearer of the trident" — Śiva's weapon of dissolution</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 36 · Cakra VI</span>
+          <span class="raga-name">Calanāṭa</span>
+          <span class="raga-deva">चलनाट</span>
+          <span class="raga-svara">Sa Ri₃ Ga₃ Ma₁ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 232 · <em>Mahātāṇḍava-sākṣiṇī</em> — Witness of the great Tāṇḍava; Calanāṭa = "moving drama/dance"</span>
+        </div>
+
+        <!-- CAKRA 7–12: Condensed -->
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 37 · Cakra VII (Ṛṣi)</span>
+          <span class="raga-name">Sālagam</span>
+          <span class="raga-deva">सालगम्</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₂ Pa Dha₁ Ni₁</span>
+          <span class="raga-xref">Tīvra Ma · Nāma 228 · <em>Mahāyantrā</em> — The great yantra; Ma₂ (tīvra) is the sharpened pivot of the yantra's inner triangle</span>
+        </div>
+
+        <div class="raga-card">
+          <span class="raga-num">Mēḷa 39 · Cakra VII</span>
+          <span class="raga-name">Jhālavarāḷi</span>
+          <span class="raga-deva">झालवराळि</span>
+          <span class="raga-svara">Sa Ri₁ Ga₁ Ma₂ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Rasa: Bhayānaka/Raudra · Nāma 269 · <em>Rudrarūpā</em> — She who takes the form of Rudra; among the most austere of all Carnatic scales</span>
+        </div>
+
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 45 · Cakra VIII (Vasu)</span>
+          <span class="raga-name">Śubhapantuvarāḷi</span>
+          <span class="raga-deva">शुभपन्तुवराळि</span>
+          <span class="raga-svara">Sa Ri₁ Ga₂ Ma₂ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Rasa: Bhakti · Nāma 353 · <em>Bhaktimat-kalpalatiikā</em> — The wish-granting creeper for devotees; Śubha = auspicious, Pantuvarāḷi is the rāga of intense longing and devotional surrender</span>
+        </div>
+
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 51 · Cakra IX (Brahma)</span>
+          <span class="raga-name">Kāmavardhini</span>
+          <span class="raga-deva">कामवर्धिनी</span>
+          <span class="raga-svara">Sa Ri₁ Ga₃ Ma₂ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Nāma 322 · <em>Kāmakalārūpā</em> — She who is in the form of KāmaKalā; Kāmavardhini = "increaser of Kāma" — the creative eros of KāmaKalā geometry</span>
+        </div>
+
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 53 · Cakra IX</span>
+          <span class="raga-name">Gamanasrama</span>
+          <span class="raga-deva">गमनश्रम</span>
+          <span class="raga-svara">Sa Ri₂ Ga₂ Ma₂ Pa Dha₁ Ni₃</span>
+          <span class="raga-xref">Nāma 254 · <em>Dhyānadhyātṛdhyeyarūpā</em> — Meditation, meditator, and meditated as one; Gamana = movement of consciousness in meditation</span>
+        </div>
+
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 65 · Cakra XI (Rudra)</span>
+          <span class="raga-name">Mechakalyāṇi</span>
+          <span class="raga-deva">मेचकल्याणि</span>
+          <span class="raga-svara">Sa Ri₂ Ga₃ Ma₂ Pa Dha₂ Ni₃</span>
+          <span class="raga-xref">Rasa: Śṛṅgāra/Ādvitīya · Nāma 324 · <em>Kalyāṇī</em> — She who bestows auspiciousness; Mechakalyāṇi (= Yaman Kalyān) is the most celebrated evening rāga of north Indian music, directly named after this nāma</span>
+        </div>
+
+        <div class="raga-card highlighted">
+          <span class="raga-num">Mēḷa 72 · Cakra XII (Āditya)</span>
+          <span class="raga-name">Rasikapriya</span>
+          <span class="raga-deva">रसिकप्रिया</span>
+          <span class="raga-svara">Sa Ri₃ Ga₃ Ma₂ Pa Dha₃ Ni₃</span>
+          <span class="raga-xref">Nāma 365 · <em>Svātmānanda-lavī-bhūta-brahmādy-ānanda-santatiḥ</em> — Her bliss exceeds Brahmā's bliss; Mēḷa 72, using the sharpest forms of all svaras, is the scale of maximum intensity — the sonic correlate of the infinite beyond infinity</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ══════════ TAB IV · 9 ALAṄKĀRAS ══════════ -->
+    <div class="tab-panel" id="tab-alankara">
+
+      <div class="section-label">Tab IV · Nava Alaṅkāra · नव अलंकार · The Nine Ornamental Patterns</div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(20px,3vw,30px); color:var(--cream); margin-bottom:12px;">
+        Nine Alaṅkāras · Nāṭyaśāstra & Saṅgīta Ratnākara · Cross-Referenced
+      </h2>
+
+      <p class="prose">
+        The Nāṭyaśāstra (Adhyāya 29) enumerates melodic ornaments (<em>alaṅkāras</em>) that decorate a svara sequence — analogous to the ornaments the Goddess wears on her cosmic body (nāma 282–284, 289, etc.). The Saṅgīta Ratnākara systematizes 63 alaṅkāras, but the primary 9 (nava alaṅkāra) form the pedagogical foundation of Carnatic music. Each of the nine encodes a specific mode of movement between svaras — and each maps to a specific attribute of the Goddess in Part IV.
+      </p>
+
+      <div class="nada-callout">
+        <h4>Alaṅkāra as the Goddess's Ornament · नाम ८९ से साम्य</h4>
+        <p>The word <em>alaṅkāra</em> (ornament, decoration) appears directly in the Sahasranāma — the Goddess is adorned with divine ornaments (nāma descriptions from the Adhyāya 12 arisal-narrative: <em>"adorned with all ornaments"</em>). In music, alaṅkāras are not external additions to a melody but integral modes of moving between notes. Similarly, the Goddess's ornaments are not external to her but are the modes by which her consciousness moves between states — her smile (nāma 242), her crescent moon (nāma 243), her ruby complexion (nāma 248) are all sonic alaṅkāras: specific vibrational qualities of her own being.</p>
+      </div>
+
+      <div class="alankara-row header">
+        <span class="col-num">#</span>
+        <span class="col-name">Alaṅkāra · Sanskrit</span>
+        <span class="col-pattern">Svara Pattern · Description</span>
+        <span class="col-xref">Cross-Ref · Part IV Nāma</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">१</span>
+        <span class="col-name"><em>Alaṅkāra 1</em><br>Sthāyi</span>
+        <span class="col-pattern">Sa Sa Sa — Dwelling on a single svara; the note that rests in itself without ornamentation. The tonic's self-sufficiency.</span>
+        <span class="col-xref">Nāma 263 · <em>Sarvāvasthāvivarjitā</em> — She who transcends all states; the Sthāyi (resting in oneself) is the musical analogue of the Turyātīta: pure, without movement, self-complete.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">२</span>
+        <span class="col-name"><em>Alaṅkāra 2</em><br>Āroha</span>
+        <span class="col-pattern">Sa Ri Ga Ma Pa Dha Ni Ṡa — Ascending scale; progressive ascent through all seven svaras from the root to the octave.</span>
+        <span class="col-xref">Nāma 264–273 · <em>Pañcakṛtya sequence</em> — The sequential five cosmic acts as an ascending progression from Sṛṣṭi (creation/Sa) to Anugraha (grace/Ni); the āroha of the divine acts.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">३</span>
+        <span class="col-name"><em>Alaṅkāra 3</em><br>Avaroha</span>
+        <span class="col-pattern">Ṡa Ni Dha Pa Ma Ga Ri Sa — Descending scale; the reverse journey from the octave back to the tonic — grace returning to its source.</span>
+        <span class="col-xref">Nāma 357 · <em>Tāpatraya-agni-santapta-samāhlādana-candrikā</em> — The moonlight that cools those burned by triple fire; the avaroha (descent) of cooling grace from the high note of suffering back to the tonic of peace.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">४</span>
+        <span class="col-name"><em>Alaṅkāra 4</em><br>Janta</span>
+        <span class="col-pattern">Sa Sa Ri Ri Ga Ga Ma Ma — Each svara struck twice in succession; the doubling that gives stability and emphasis to each note before proceeding.</span>
+        <span class="col-xref">Nāma 341–342 · <em>Kṣetrasvarūpā · Kṣetreśī</em> — Field and field-lord's wife together; the Janta's paired-note movement encodes the Goddess as both Kṣetra and Kṣetreśī — two but inseparably paired.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">५</span>
+        <span class="col-name"><em>Alaṅkāra 5</em><br>Daṭṭu</span>
+        <span class="col-pattern">Sa Ga — Ri Ma — Ga Pa — (skipping notes): leaping over adjacent notes to create unexpected intervallic jumps; the ornament of surprise.</span>
+        <span class="col-xref">Nāma 281 · <em>Unmeṣanimiṣotpanna-vipanna-bhuvanāvalī</em> — Worlds arising and disappearing with each blink; the Daṭṭu's leaping intervals are the sudden appearance/disappearance of entire worlds.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">६</span>
+        <span class="col-name"><em>Alaṅkāra 6</em><br>Gamaka</span>
+        <span class="col-pattern">Sa~Ri (oscillation) — rapid, deliberate oscillation between adjacent notes creating a vibrato-like shimmer; not landing fully on either note.</span>
+        <span class="col-xref">Nāma 242 · <em>Cāruhāsā</em> — The beautiful smile; the Gamaka is the musical equivalent of the Goddess's slight, trembling smile — not fully laughing, not fully still, shimmering between expression and repose.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">७</span>
+        <span class="col-name"><em>Alaṅkāra 7</em><br>Mūrchanā</span>
+        <span class="col-pattern">Beginning from Ri instead of Sa — rotating the starting point of the same scale to produce a different modal flavor; the same seven notes in a different relationship.</span>
+        <span class="col-xref">Nāma 256 · <em>Viśvarūpā</em> — She who has the whole universe as her form; the Mūrchanā principle (same seven notes, infinite modal variations) encodes the Goddess's cosmic form: one Goddess, infinite modal expressions.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">८</span>
+        <span class="col-name"><em>Alaṅkāra 8</em><br>Tāna</span>
+        <span class="col-pattern">Rapid arpeggio patterns covering multiple octave positions — the elaboration of a rāga at high speed; consciousness expanding freely across all registers.</span>
+        <span class="col-xref">Nāma 282–284 · <em>Sahasraśīrṣa · Sahasrākṣī · Sahasrapāt</em> — Thousand heads, thousand eyes, thousand feet; the Tāna's rapid multi-octave movement enacts the Goddess's simultaneous presence in all registers of existence.</span>
+      </div>
+
+      <div class="alankara-row">
+        <span class="col-num">९</span>
+        <span class="col-name"><em>Alaṅkāra 9</em><br>Pratyāgata</span>
+        <span class="col-pattern">Sa Ri Sa — Ri Ga Ri — Ga Ma Ga — (touching the next note and returning): each svara reaches forward, touches the next, and returns — the gesture of the soul reaching toward the divine and being pulled back.</span>
+        <span class="col-xref">Nāma 273 · <em>Anugrahadā</em> — She who confers grace; the Pratyāgata is the musical shape of grace itself: the note reaches forward (the soul's aspiration), touches the divine (the grace-note), and returns home transformed — not as the same note it was before.</span>
+      </div>
+
+    </div>
+
+    <!-- ══════════ TAB V · CROSS-REFERENCE MATRIX ══════════ -->
+    <div class="tab-panel" id="tab-xref-matrix">
+
+      <div class="section-label">Tab V · Cross-Reference Matrix · नामाङ्क-राग-स्वर-सारणी</div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(20px,3vw,30px); color:var(--cream); margin-bottom:12px;">
+        Nāma · Rāsa · Mēḷa · Svara · Alaṅkāra — Complete Matrix
+      </h2>
+
+      <p class="prose">The following matrix organizes the key cross-references of this entire sonic-analysis section into a single lookup table. Each row links a Part IV nāma-cluster to its aesthetic mood (rasa), the most resonant Mēḷakarta rāga, the dominant svara of that correspondence, and the alaṅkāra that best embodies the nāma's spiritual quality.</p>
+
+      <table class="corresp-table">
+        <thead>
+          <tr>
+            <th>Nāma(s) · Part IV</th>
+            <th>Śākta Attribute</th>
+            <th>Rasa</th>
+            <th>Primary Mēḷa / Rāga</th>
+            <th>Svara · Alaṅkāra</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-nama">225–227 · Mahāyogeśvareśvarī · Mahātantrā · Mahāmantrā</td>
+            <td>Sovereignty over all yogic and Tantric systems</td>
+            <td>Vīra (heroic)</td>
+            <td>Mēḷa 29 · Śaṅkarābharaṇam</td>
+            <td>Pa (acala) · Āroha</td>
+          </tr>
+          <tr>
+            <td class="td-nama">228–229 · Mahāyantrā · Mahāsanā</td>
+            <td>Yantra-body · Five-corpse throne</td>
+            <td>Adbhuta (wonder)</td>
+            <td>Mēḷa 51 · Kāmavardhini</td>
+            <td>Ma₂ tīvra · Daṭṭu</td>
+          </tr>
+          <tr>
+            <td class="td-nama">231 · Mahābhairavapūjitā</td>
+            <td>Śiva/Bhairava as her worshipper</td>
+            <td>Raudra + Bhakti</td>
+            <td>Mēḷa 20 · Naṭabhairavi</td>
+            <td>Dha₁ (komal) · Gamaka</td>
+          </tr>
+          <tr>
+            <td class="td-nama">232 · Mahātāṇḍava-sākṣiṇī</td>
+            <td>Witness of cosmic dissolution-dance</td>
+            <td>Śānta (pure witness)</td>
+            <td>Mēḷa 1 · Kanakaṅgi</td>
+            <td>Sa (tonic) · Sthāyi</td>
+          </tr>
+          <tr>
+            <td class="td-nama">234 · Mahātripurasundarī</td>
+            <td>Beauty of the three worlds</td>
+            <td>Śṛṅgāra (supreme)</td>
+            <td>Mēḷa 28 · Harikāmbhoji</td>
+            <td>Ga₃ · Tāna</td>
+          </tr>
+          <tr>
+            <td class="td-nama">238–239 · Manuvidyā · Candravidyā</td>
+            <td>Solar and lunar knowledge-forms</td>
+            <td>Śānta / Karuṇā</td>
+            <td>Mēḷa 15 · Māyāmāḷavagauḷa / Mēḷa 21 · Kīravāṇi</td>
+            <td>Ri₁ · Mūrchanā</td>
+          </tr>
+          <tr>
+            <td class="td-nama">240 · Candramaṇḍalamadhyagā</td>
+            <td>Dwelling in the moon's nectar-disc</td>
+            <td>Śānta / Śṛṅgāra</td>
+            <td>Mēḷa 16 · Cakravākam</td>
+            <td>Ni₂ → Sa · Pratyāgata</td>
+          </tr>
+          <tr>
+            <td class="td-nama">241–243 · Cārurūpā · Cāruhāsā · Cārucandrakalādhārā</td>
+            <td>Unchanging beauty · smile · crescent</td>
+            <td>Śṛṅgāra</td>
+            <td>Mēḷa 26 · Cārukesi</td>
+            <td>Ga₃ Dha₁ · Gamaka</td>
+          </tr>
+          <tr>
+            <td class="td-nama">251–253 · Cinmayī · Paramānandā · Vijñānaghana</td>
+            <td>Pure consciousness · supreme bliss · dense intelligence</td>
+            <td>Śānta</td>
+            <td>Mēḷa 22 · Kharaharapriya</td>
+            <td>Sa (pure) · Sthāyi</td>
+          </tr>
+          <tr>
+            <td class="td-nama">254 · Dhyānadhyātṛdhyeyarūpā</td>
+            <td>Meditator-meditation-meditated as one</td>
+            <td>Śānta / Adbhuta</td>
+            <td>Mēḷa 53 · Gamanasrama</td>
+            <td>Ma₁ (pivot) · Janta</td>
+          </tr>
+          <tr>
+            <td class="td-nama">257–263 · States sequence</td>
+            <td>Waking / Dream / Deep Sleep / Turya / Beyond</td>
+            <td>Śānta (deepening)</td>
+            <td>Mēḷa 15 → 1 (progressively simpler)</td>
+            <td>All svaras → Sa · Avaroha</td>
+          </tr>
+          <tr>
+            <td class="td-nama">264–274 · Pañcakṛtya</td>
+            <td>Five cosmic acts as the Goddess's own nature</td>
+            <td>Vīra + Adbhuta</td>
+            <td>Mēḷa 29 → 36 (ascending cakra-groups)</td>
+            <td>Full scale · Āroha then Avaroha</td>
+          </tr>
+          <tr>
+            <td class="td-nama">275 · Bhānumaṇḍalamadhyasthā</td>
+            <td>Center of the sun's disc</td>
+            <td>Vīra / Adoration</td>
+            <td>Mēḷa 17 · Sūryakāntam</td>
+            <td>Ga₃ · Tāna</td>
+          </tr>
+          <tr>
+            <td class="td-nama">281 · Unmeṣanimiṣa…</td>
+            <td>Worlds arising/perishing with each blink</td>
+            <td>Adbhuta</td>
+            <td>Mēḷa 51 · Kāmavardhini</td>
+            <td>Ma₂ · Daṭṭu</td>
+          </tr>
+          <tr>
+            <td class="td-nama">285 · Ābrahma-kīṭa-jananī</td>
+            <td>Mother of all from Brahmā to the worm</td>
+            <td>Vātsalya (maternal)</td>
+            <td>Mēḷa 9 · Dhenuka</td>
+            <td>Ma₁ · Janta (paired)</td>
+          </tr>
+          <tr>
+            <td class="td-nama">299–300 · Nādarūpā · Nāmarūpavivarjitā</td>
+            <td>She IS sound AND beyond all name/form</td>
+            <td>Śānta + Adbhuta</td>
+            <td>Mēḷa 1 (silence) → Mēḷa 72 (all svaras)</td>
+            <td>Sa only → All 12 · Sthāyi → Tāna</td>
+          </tr>
+          <tr>
+            <td class="td-nama">301 · Hrīṃkārī</td>
+            <td>She who IS the bīja Hrīṃ</td>
+            <td>All rasas unified</td>
+            <td>Mēḷa 29 · Śaṅkarābharaṇam (as base)</td>
+            <td>All svaras · Mūrchanā</td>
+          </tr>
+          <tr>
+            <td class="td-nama">322 · Kāmakalārūpā</td>
+            <td>Form of KāmaKalā geometry</td>
+            <td>Śṛṅgāra</td>
+            <td>Mēḷa 51 · Kāmavardhini</td>
+            <td>Ri₂ Ga₃ (triangle interval) · Daṭṭu</td>
+          </tr>
+          <tr>
+            <td class="td-nama">324 · Kalyāṇī</td>
+            <td>She who bestows auspiciousness</td>
+            <td>Śṛṅgāra / Śānta</td>
+            <td>Mēḷa 65 · Mechakalyāṇi</td>
+            <td>Ma₂ · Āroha</td>
+          </tr>
+          <tr>
+            <td class="td-nama">326 · Karuṇārasasāgarā</td>
+            <td>Ocean of compassion</td>
+            <td>Karuṇā</td>
+            <td>Mēḷa 8 · Hanumatodi</td>
+            <td>Ri₁ Ga₂ · Avaroha</td>
+          </tr>
+          <tr>
+            <td class="td-nama">353 · Bhaktimat-kalpalatikā</td>
+            <td>Wish-granting creeper for devotees</td>
+            <td>Bhakti</td>
+            <td>Mēḷa 45 · Śubhapantuvarāḷi</td>
+            <td>Ga₂ Ni₃ · Pratyāgata</td>
+          </tr>
+          <tr>
+            <td class="td-nama">358 · Taruṇī</td>
+            <td>Ever-young · Eternally 16</td>
+            <td>Śṛṅgāra</td>
+            <td>Mēḷa 28 · Harikāmbhoji</td>
+            <td>Ga₃ Pa Dha₂ · Gamaka</td>
+          </tr>
+          <tr>
+            <td class="td-nama">362–364 · Cit · Tat · Cideka-rasa</td>
+            <td>Pure consciousness · That · Undivided rasa</td>
+            <td>Śānta (absolute)</td>
+            <td>Mēḷa 1 · Kanakaṅgi (purest/simplest)</td>
+            <td>Sa · Sthāyi</td>
+          </tr>
+          <tr>
+            <td class="td-nama">365 · Svātmānanda-lavī-bhūta…</td>
+            <td>Her bliss makes Brahmā's bliss negligible</td>
+            <td>Ānanda (beyond rasa)</td>
+            <td>Mēḷa 72 · Rasikapriya (all svaras at max)</td>
+            <td>Ri₃ Ga₃ Ma₂ Dha₃ Ni₃ · Full Tāna</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-gold" style="margin-top:36px;">
+        <h4>The Sonic Arc of Part IV · Nāmas 225–365 as a Rāga Performance</h4>
+        <p>
+          The entire nāma-sequence of Part IV, read through its sonic correspondences, traces the arc of a complete Carnatic concert performance: beginning with the stately <em>Śaṅkarābharaṇam</em>-like grandeur of the Mahā-epithets (nāmas 225–237), descending into the moonlit introspection of Māyāmāḷavagauḷa and Kīravāṇi (nāmas 238–250), stilling into the pure Sa of Kanakaṅgi for the states-analysis (257–263), ascending through the Pañcakṛtya's full āroha (264–274), expanding into Tāna across all registers for the cosmic body (275–300), cycling through the Hrīṃ-series with the intimacy of Hanumatodi (301–345), and culminating — at nāma 365 — in the Tāna of Rasikapriya at its maximum intensity: all twelve chromatic positions sounding simultaneously, as the Goddess's bliss exceeds infinity.
+        </p>
+      </div>
+
+      <div class="colophon" style="padding:40px 20px; margin-top:40px;">
+        <div class="bija-row">ऐं ह्रीं श्रीं</div>
+        <p style="font-style:italic; color:var(--text2); font-size:14px; line-height:1.8;">
+          नाद-ब्रह्म-स्वरूपिण्यै नमः<br>
+          <em>Obeisance to Her who is of the nature of Nāda-Brahman</em><br>
+          — Saṅgīta Ratnākara, Śārṅgadeva, Adhyāya I, opening invocation
+        </p>
+      </div>
+
+    </div><!-- /tab-xref-matrix -->
+
+  </div><!-- /.nada-panels -->
+</div><!-- /.nada-section -->
+
+<!-- ── EXTRA JS (append to your existing <script> block OR keep here) ── -->
+<script>
+  function showTab(id) {
+    // deactivate all panels and buttons
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    // activate target
+    const panel = document.getElementById('tab-' + id);
+    if (panel) panel.classList.add('active');
+    // activate matching button
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)) {
+        b.classList.add('active');
+      }
+    });
+    // scroll to the tab header
+    document.querySelector('.nada-tab-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
 </body>
 </html>
